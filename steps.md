@@ -6,6 +6,7 @@ source .env/bin/activate
 pip install requests
 pip install pillow
 pip install tensorflow
+pip freeze > requirements.txt
 code .
 ```
 
