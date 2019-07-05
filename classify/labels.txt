@@ -1,8 +1,2 @@
-Boston Bull
-Chihuahua
-Great Dane
-Japanese Spaniel
-Maltese
-Pekinese
-Poodle
-Shih Tzu
+cat
+dog
