@@ -1,41 +1,38 @@
-import requests
-from io import BytesIO
 from datetime import datetime
-
-import tensorflow as tf
-
-from PIL import Image
-import numpy as np
-import sys
 import logging
 import os
 
 from urllib.request import urlopen
+from PIL import Image
+import tensorflow as tf
+import numpy as np
+
 
 scriptpath = os.path.abspath(__file__)
 scriptdir = os.path.dirname(scriptpath)
 filename = os.path.join(scriptdir, 'model.pb')
 labels_filename = os.path.join(scriptdir, 'labels.txt')
 
-# filename = 'model.pb'
-# labels_filename = 'labels.txt'
-
-network_input_size = 224
 
 output_layer = 'loss:0'
 input_node = 'Placeholder:0'
 
 graph_def = tf.GraphDef()
 labels = []
+network_input_size = 0
 
 def _initialize():
-    global labels
+    global labels, network_input_size
     if not labels:
-        with tf.gfile.FastGFile(filename, 'rb') as f:
+        with tf.io.gfile.GFile(filename, 'rb') as f:
             graph_def.ParseFromString(f.read())
             tf.import_graph_def(graph_def, name='')
         with open(labels_filename, 'rt') as lf:
             labels = [l.strip() for l in lf.readlines()]
+        with tf.compat.v1.Session() as sess:
+            input_tensor_shape = sess.graph.get_tensor_by_name('Placeholder:0').shape.as_list()
+            network_input_size = input_tensor_shape[1]
+            logging.info('network_input_size = ' + str(network_input_size))
 
 def _log_msg(msg):
     logging.info("{}: {}".format(datetime.now(),msg))
@@ -104,7 +101,7 @@ def _extract_and_resize(img, targetSize):
 
 def _extract_and_resize_to_256_square(image):
     h, w = image.shape[:2]
-    _log_msg("crop_center: " + str(w) + "x" + str(h) +" and resize to " + str(256) + "x" + str(256))
+    _log_msg("extract_and_resize_to_256_square: " + str(w) + "x" + str(h) +" and resize to " + str(256) + "x" + str(256))
     return _extract_and_resize(image, (256, 256))
 
 def _crop_center(img,cropx,cropy):
@@ -151,8 +148,6 @@ def _update_orientation(image):
     return image
                 
 def _predict_image(image):
-        
-    _log_msg('Predicting image')
     try:
         if image.mode != "RGB":
             _log_msg("Converting to RGB")
@@ -177,10 +172,10 @@ def _predict_image(image):
         # Crop the center for the specified network_input_Size
         cropped_image = _crop_center(resized_image, network_input_size, network_input_size)
 
-        tf.reset_default_graph()
+        tf.compat.v1.reset_default_graph()
         tf.import_graph_def(graph_def, name='')
 
-        with tf.Session() as sess:
+        with tf.compat.v1.Session() as sess:
             prob_tensor = sess.graph.get_tensor_by_name(output_layer)
             predictions, = sess.run(prob_tensor, {input_node: [cropped_image] })
             
