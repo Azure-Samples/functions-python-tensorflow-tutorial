@@ -128,4 +128,6 @@ obj
 appsettings.json
 local.settings.json
 .python_packages
-functions-python-customvision-tutorial.zip
+*.zip
+
+.vscode/
