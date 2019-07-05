@@ -14,4 +14,9 @@ def main(req: func.HttpRequest) -> func.HttpResponse:
     # Scoring step
     results = predict.predict_image_from_url(image_url)
 
-    return json.dumps(results)
+    headers = {
+        "Content-type": "application/json",
+        "Access-Control-Allow-Origin": "*"
+    }
+
+    return func.HttpResponse(json.dumps(results), headers = headers)
