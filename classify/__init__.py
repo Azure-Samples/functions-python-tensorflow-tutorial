@@ -1,18 +1,15 @@
 import logging
-
 import azure.functions as func
-
 import json
 
 # Import helper script
-from . import predict
+from .predict import predict_image_from_url
 
 def main(req: func.HttpRequest) -> func.HttpResponse:
-    logging.info('Python HTTP trigger function processed a request.')
-
     image_url = req.params.get('img')
-    # Scoring step
-    results = predict.predict_image_from_url(image_url)
+    logging.info('Image URL received: ' + image_url)
+
+    results = predict_image_from_url(image_url)
 
     headers = {
         "Content-type": "application/json",
