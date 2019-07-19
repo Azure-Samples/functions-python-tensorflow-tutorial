@@ -1,16 +1,3 @@
----
-page_type: sample
-topic: sample
-languages:
-  - python
-products:
-  - azure
-  - azure-functions
-  - custom-vision
-name: "Make machine learning predictions with TensorFlow and Azure Functions"
-description: "This sample trains and exports an image classifier from Custom Vision, then it applies the model in Azure Functions using Python and TensorFlow"
----
-
 # Make machine learning predictions with TensorFlow and Azure Functions
 
 * Train and export an image classifier that predicts whether a photo contains a dog or a cat using Azure Custom Vision Service
