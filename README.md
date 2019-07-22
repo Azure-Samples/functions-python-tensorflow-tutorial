@@ -8,6 +8,8 @@
 This is a sample application that you can use to follow along with the tutorial at 
 [Make machine learning predictions with TensorFlow and Azure Functions](https://docs.microsoft.com/azure/azure-functions/functions-machine-learning-tensorflow?WT.mc_id=functionspython-github-antchu). 
 
+![Screenshot](resources/assets/screenshot.png)
+
 ## License
 
 See [LICENSE](LICENSE).
