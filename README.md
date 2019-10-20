@@ -1,3 +1,14 @@
+---
+page_type: sample
+languages:
+- python
+- html
+products:
+- azure
+description: "Make machine learning predictions with TensorFlow and Azure Functions"
+urlFragment: functions-python-tensorflow-tutorial
+---
+
 # Make machine learning predictions with TensorFlow and Azure Functions
 
 * Train and export an image classifier that predicts whether a photo contains a dog or a cat using Azure Custom Vision Service
